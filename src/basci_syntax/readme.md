@@ -13,7 +13,10 @@
 10. [bit_op.erl](bit_op.erl) - it is a simple program to show how to use bitwise operators.
 11. [while.erl](while.erl) - it is a simple program to show how to use while loop.
 12. [for.erl](for.erl) - it is a simple program to show how to use for loop.
-13. 
+13. [if.erl](if.erl) - it is a simple program to show how to use if/case statement.
+14. [function.erl](function.erl) - it is a simple program to show how to use function.
+15. [recursion.erl](recursion.erl) - it is a simple program to show how to use recursion.
+16. [myfile.erl](myfile.erl) - it is a simple program to show how to use file I/O. see [api](https://www.erlang.org/doc/search)
 
 ## Shell commands
 
@@ -102,3 +105,33 @@ be changed, unless you use `f()` to remove the binding.
     | 5        | + - bor bxor  or xor |
     | 6        | == /= =< < => >      |
 
+## Functions
+
+Syntax:
+
+```
+FunctionName(Param1, Param2, ..., ParamN) -> FunctionBody.
+```
+
+1. FunctionName - It is the name of the function.
+2. Param1, Param2, ..., ParamN - These are the parameters of the function.
+3. N - It is the arity of the function.
+4. FunctionBody - It is the body of the function.
+
+### Anonymous FUnctions
+
+An anonymous function is a function without a name.
+
+### Functions with Guard Sequences
+
+Syntax:
+
+```
+FunctionName(Param1, Param2, ..., ParamN) when GuardSequence1, GuardSequence2, ..., GuardSequenceN -> FunctionBody.
+```
+
+see[function.erl](function.erl)
+
+### Functions API
+
+see [Erlang doc](https://www.erlang.org/doc/search)
