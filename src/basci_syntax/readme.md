@@ -17,6 +17,7 @@
 14. [function.erl](function.erl) - it is a simple program to show how to use function.
 15. [recursion.erl](recursion.erl) - it is a simple program to show how to use recursion.
 16. [myfile.erl](myfile.erl) - it is a simple program to show how to use file I/O. see [api](https://www.erlang.org/doc/search)
+17. [myRecord.erl](myRecord.erl) - it is a simple program to show how to use record.
 
 ## Shell commands
 
@@ -135,3 +136,71 @@ see[function.erl](function.erl)
 ### Functions API
 
 see [Erlang doc](https://www.erlang.org/doc/search)
+
+## Records
+
+A record is created using the Record Identifier. A record is 
+a user-defined data type that is used to store a fixed number of
+elements.
+
+Syntax:
+
+```
+-record(RecordName, {Field1, Field2, ..., FieldN}).
+```
+
+1. RecordName - It is the name of the record.
+2. Field1, Field2, ..., FieldN - These are the list of various fields which constitute the record.
+
+## Exceptions
+
+Exception handling is required in any programming language to handle the 
+runtime errors, so that normal flow of the application can be maintained.
+Exception normally disrupts the normal flow of the application, which
+is the reason why we need to use Exception handling in our application.
+
+In Erlang, there are 3 types of exceptions:
+
+1. Error - Calling erlang:error(Reason) will end the exception in the current process and include
+a task trace of the last functions called with their arguments when you catch it. These are the kind of exceptions
+that provoke the runtime error message.
+2. Exists - There are two kinds of exits: internal exits and external exits. The internal exits
+are triggered by calling `exit/1` and make the current process stop its execution. The external exits
+are called with `exit/2` and have to do with multiple processes in the concurrent aspect of Erlang.
+
+    > exit/2, however, is used to send an exit signal from one process to another, it's an external exit. This is where the "concurrent aspect" comes into play. In Erlang, you can have many processes running at the same time (concurrently). These processes can communicate and interact with each other in various ways, including sending exit signals.
+    > Below is an example of an external exit:
+    > ```erlang
+    > Pid = spawn(fun() -> receive after 10000 -> ok end end),
+    > exit(Pid, kill).
+    > ```
+
+3. Throw - A throw is a class of exception used for cases that the programmer can be expected to handle.
+In comparison with exits and errors, they don't really carry any `crash that process` semantics, but rather
+they control the flow. As you use throws while expecting the programmer to handle them, it's usually
+a good idea to document their use within a module using them.
+
+A `try...catch` is a way to evaluate an expression while letting you handle the successful case as well as
+the errors encountered.
+
+Syntax:
+
+```
+try Exression of
+SuccessPattern1 [when GuardSeq1] -> Expression1;
+SuccessPattern2 [when GuardSeq2] -> Expression2;
+...
+SuccessPatternN [when GuardSeqN] -> ExpressionN
+catch
+TypeOfError:ErrorPattern1 [when GuardSeq1] -> Expression1;
+TypeOfError:ErrorPattern2 [when GuardSeq2] -> Expression2;
+...
+TypeOfError:ErrorPatternN [when GuardSeqN] -> ExpressionN
+end
+```
+The Expression in between try and of is said to be protected. This means that any kind of exception
+happening within that call will be caught by the catch part of the `try...catch` expression.
+
+We can replace the `TypeOfError` by either `error`, `exit` or `throw`, for each respective type we've
+seen above. If no type is specified, a throw is assumed.
+
