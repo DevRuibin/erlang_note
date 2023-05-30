@@ -18,6 +18,9 @@
 15. [recursion.erl](recursion.erl) - it is a simple program to show how to use recursion.
 16. [myfile.erl](myfile.erl) - it is a simple program to show how to use file I/O. see [api](https://www.erlang.org/doc/search)
 17. [myRecord.erl](myRecord.erl) - it is a simple program to show how to use record.
+18. [exception.erl](exception.erl) - it is a simple program to show how to use exception.
+19. [macro.erl](macro.erl) - it is a simple program to show how to use macro.
+20. [funs.erl](funs.erl) - it is a simple program to show how to use `fun`
 
 ## Shell commands
 
@@ -203,4 +206,190 @@ happening within that call will be caught by the catch part of the `try...catch`
 
 We can replace the `TypeOfError` by either `error`, `exit` or `throw`, for each respective type we've
 seen above. If no type is specified, a throw is assumed.
+
+## Macros
+
+Macros are generally used for inline code replacements. In Erlang, macros
+are defined via the following syntax:
+
+```
+-define(ConstantName, ConstantValue).
+-efine(FunctionName(Param1, Param2, ..., ParamN), FunctionBody).
+```
+
+The following additional statements are available for macros -
+1. `undef(Macro)` - Undefines the macro; after this you cannot call the macro.
+2. `ifdef(Macro)` - Evaluates the following lines only if the Macro has been defined.
+3. `ifndef(Macro)` - Evaluates the following lines only if Macro is undefined.
+4. `else` - Allowed after an ifdef or ifndef statement. If the condition was false, the statements following else are evaluated.
+5. `endif` - Marks the end of ifdef or ifndef statemetn.
+
+When using the above statements, it should be used in the proper way as shown
+in the following program:
+
+```e
+-ifdef(<FLAGnAME>).
+
+-define(...).
+
+-else.
+
+-define(...).
+-endif.
+```
+
+## Header Files
+
+Header files are like include files in any other programming language. It is useful for splitting modules into different
+files and then accessing these header files into separate programs. 
+
+1. Let us create a header file called `user.hrl` with the following content:
+
+```erlang
+-record(user, {name, age, address}).
+```
+
+## Preprocessors
+
+Before an Erlang module is compiled, it is automatically processed by the Erlang Preprocessor.
+The preprocessor expands any macros that might be in the source file and inserts any necessary
+include files.
+
+Ordinarily, you won't need to look at the output of the preprocessor, but in exceptional circumstances,
+you might want to save the output of the preprocessor. To see the result of preprocessing the module
+`some_module.erl` give the OS shell command.
+
+```bash
+erlc -P some_module.erl
+```
+
+Then a file called `some_module.P` would be generated.
+
+## Pattern matching
+
+Patterns look the same as terms - they can be simple literals like atoms and numbers, compound like 
+tuples and lists, or a mixture of both. They can also contain variables, which are alphanumeric strings
+that begin with a capital letter or underscore. A special `anonymous variable`, `_`, is used when you don't
+care about the value to be matched, and won't be using it.
+
+A pattern matches if it has the same `shape` as the term being matched, and atoms encountered are the same.
+For example, the following matches succeed:
+```erlang
+B = 1.
+2 = 2.
+{ok, C} = {ok, 40}.
+[H|T] = {1, 2, 3, 4}.
+```
+
+Note that in the fourth example, the pipe(|) signifying the head and tail of the list as described in Terms.
+Also note that the left hand side should match the right hand side which is the normal case patterns.
+
+The following examples of pattern matching will fail.
+
+```erlang
+1 = 2.
+{ok, A} = {failure, "Don't know the question"}.
+{H|T} = []
+```
+
+In the case of the pattern-matching operator, a failure generates an error and the process exits. How this
+can be trapped and handled is covered in Errors. Patterns are used to select which clause of a function
+will be executed.
+
+## BIFs
+
+BIFs are functions that are built into Erlang. They usually do tasks that impossible to program in Erlang.
+For example, it's impossible to turn a list into a tuple or to find the current time and date. To perform
+such an operation, we call a BIF.
+
+## Binaries
+
+Use a data structure called a binary to store large quantities of raw data. Binaries store data in much more spece
+efficient manner than in lists or tuples, and the runtime system is optimized for the efficient input and output
+binaries.
+
+binaries are written and printed as sequences of integers or strings, enclosed in double less than
+and greater than brackets.
+
+Following is an example of binaries in Erlang -
+
+```erlang
+-module(helloworld).
+-export([start/0]).
+
+start() ->
+  io:fwrite("~p~n",[<<5,10,20>>]),
+  io:fwrite("~p~n",[<<"hello">>]).
+```
+
+## Funs
+
+Funs are used to define anonymous function in Erlang. The general syntax of a anonymous function is given
+below -
+
+```erlang
+F = fun(Arg1, Arg2, ..., ArgN) ->
+...
+end.
+```
+```erlang
+start() ->
+  A = fun() -> io:fwrite("Hello World!") end,
+  A().
+```
+
+## Processes
+
+The granularity of concurrency in Erlang is a process. A process is an activity/task that runs concurrently
+with and is independent of the other processes. These processes in Erlang are different than the processes and threads
+most people are familiar with. Erlang processes are lightweight, operate in isolation from other processes, and
+are scheduled by Erlang's Virtual Machine. The creation time of process is very low, the memory footprint of a just spawned
+process is very small, and a single Erlang VM can have millions of processes running.
+
+A process is created with the help of the spawn method. The general syntax of the method is given below:
+
+```bash
+spawn(Module, Name, Args).
+```
+
+1. Module - This is a predefined atom value which must be ?MODULE.
+2. Name - This is the name of the function to be called when the process is defined.
+3. Args - These are the arguments which need to be sent to the function.
+
+### Return Value
+
+Returns the process id of the new process created.
+
+## Email
+
+To send an email using Erlang, you need to use a package available from github for the same. 
+see [link](https://github.com/Vagabond/gen_smtp)
+
+## Databases
+
+Erlang has the ability to connect to the traditional databases such as SQL Server and Oracle. Erlang
+has an inbuilt odbc library that can be used to work with databases.
+
+## Ports
+
+In Erlang, ports are used for communication between different programs. A socket is a communication endpoint that allows
+machines to communicate over the Internet by using the Internet Protocol(IP).
+
+There are 2 types of protocols available for communication. One is UDP and the other is TCP. UDP lets
+applications send short messages to each other.
+
+## Distributed Programming
+
+Distributed programs are those programs that are designed to run on networks of computers and that can
+coordinate their activities only by message passing.
+
+There are a number of reasons why we might want to write distributed applications. Here are some of them.
+
+1. Performance - We can make our programs go faster by arranging that different parts of the program are run parallel
+on different machines.
+2. Reliability - We can make fault-tolerant systems by structuring the system to run on several machines. If one machine
+fails, we can continue on another machine.
+3. Scalability - As we scale up an application, sooner or later we will exhaust the capabilities of even 
+the most powerful machine. At this stage we have to add more machines to add capacity. Adding a new machine
+should be a simple operation that does not require large changes to the application architecture.
 

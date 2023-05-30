@@ -1,0 +1,22 @@
+-file("preProcessors.erl", 1).
+
+-module(preProcessors).
+
+-author("ruibin").
+
+-export([start/0]).
+
+-file("user.hrl", 1).
+
+-author("ruibin").
+
+-record(user,{name,age,address}).
+
+-file("preProcessors.erl", 15).
+
+start() ->
+    P = #user{name = "Rueibin Chang",age = 19,address = "LLN"},
+    io:fwrite("~w~n", [P#user.name]).
+
+
+
